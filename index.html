@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ImtaHost | Free Game Hosting</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #080d18;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 25px 8%;
+      border-bottom: 1px solid #202a3d;
+    }
+
+    .logo {
+      font-size: 27px;
+      font-weight: bold;
+      color: #38bdf8;
+    }
+
+    nav a {
+      color: #cbd5e1;
+      text-decoration: none;
+      margin-right: 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px 65px;
+    }
+
+    .hero h1 {
+      font-size: clamp(35px, 6vw, 60px);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: #38bdf8;
+    }
+
+    .hero p {
+      color: #94a3b8;
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
+      justify-content: center;
+      gap: 25px;
+      padding: 35px 20px 90px;
+    }
+
+    .card {
+      background: #111b2d;
+      border: 1px solid #263750;
+      border-radius: 18px;
+      padding: 30px;
+      text-align: center;
+      transition: .25s;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: #38bdf8;
+    }
+
+    .game-icon {
+      font-size: 55px;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      color: #94a3b8;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      text-decoration: none;
+      padding: 13px 25px;
+      border-radius: 9px;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #0369a1;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #64748b;
+      border-top: 1px solid #202a3d;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">⚡ ImtaHost</div>
+  <nav>
+    <a href="#games">الألعاب</a>
+    <a href="#about">من نحن</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>استضف عالمك مع <span>ImtaHost</span></h1>
+  <p>
+    منصتك لاستضافة سيرفرات الألعاب.
+    <br>
+    Minecraft و MTA:SA في مكان واحد.
+  </p>
+</section>
+
+<section class="games" id="games">
+
+  <div class="card">
+    <div class="game-icon">⛏️</div>
+    <h2>Minecraft Hosting</h2>
+    <p>
+      لوحة مستقلة لإدارة سيرفر Minecraft
+      ومتابعة حالة السيرفر وإعداداته.
+    </p>
+    <a href="minecraft.html" class="btn">
+      لوحة Minecraft
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="game-icon">🏎️</div>
+    <h2>MTA:SA Hosting</h2>
+    <p>
+      لوحة مستقلة لإدارة سيرفرات MTA:SA
+      والتحكم بإعداداتها.
+    </p>
+    <a href="mta.html" class="btn">
+      لوحة MTA:SA
+    </a>
+  </div>
+
+</section>
+
+<footer id="about">
+  © 2026 ImtaHost - All Rights Reserved
+</footer>
+
+</body>
+</html>
