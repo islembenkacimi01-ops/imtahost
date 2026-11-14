@@ -1,74 +1,634 @@
 
-<section id="auth" class="login-screen">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FerrHost.com — Minecraft Hosting</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cairo:wght@400;600;700;800;900&display=swap');
 
-  <div class="login-left">
-    <div class="login-brand">
-      <div class="login-logo">F</div>
-      <span>FerrHost.</span>
+:root {
+  --bg:#080912;
+  --panel:#101321;
+  --panel2:#151a2c;
+  --line:#252b42;
+  --text:#f4f5ff;
+  --muted:#8991aa;
+  --purple:#8965ff;
+  --cyan:#49d9ef;
+  --green:#3cde9b;
+  --red:#ff607c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:'Cairo','Inter',sans-serif;min-height:100vh;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+button:focus-visible,input:focus-visible,select:focus-visible{
+  outline:2px solid var(--cyan);outline-offset:3px
+}
+.bg-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+  radial-gradient(ellipse at 15% 20%,#5935a52a,transparent 40%),
+  radial-gradient(ellipse at 85% 80%,#087d9b20,transparent 38%),
+  linear-gradient(135deg,#080912,#0d1020 55%,#090b15);
+}
+.grid-bg{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;
+  background-image:linear-gradient(#6c72a0 1px,transparent 1px),
+  linear-gradient(90deg,#6c72a0 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+button.primary{
+  border:0;color:white;font-weight:800;padding:13px 21px;border-radius:12px;
+  background:linear-gradient(110deg,#7855ee,#a16cff);
+  box-shadow:0 8px 28px #815aff35;transition:.2s;
+}
+button.primary:hover{transform:translateY(-2px);filter:brightness(1.12)}
+button.secondary{
+  background:#ffffff08;border:1px solid var(--line);color:white;
+  padding:11px 17px;border-radius:11px;font-weight:700;
+}
+button.danger{background:#ff607c18;color:#ff8297;border:1px solid #ff607c45}
+button.success{background:#3cde9b18;color:#55e6aa;border:1px solid #3cde9b45}
+input,select{
+  width:100%;padding:13px 14px;background:#090d19;border:1px solid #293047;
+  border-radius:11px;color:white;outline:none;
+}
+input:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 3px #8965ff18}
+label{display:block;color:#b9bfd3;font-size:13px;font-weight:700;margin:0 0 8px}
+.field{margin-bottom:17px}
+.muted{color:var(--muted)}
+.brand{display:flex;align-items:center;gap:12px;font-family:Inter,sans-serif;direction:ltr}
+.brand-mark{
+  width:43px;height:43px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(140deg,#9c6bff,#4bd7e9);
+  color:#fff;font-size:21px;font-weight:900;box-shadow:0 5px 25px #8965ff55;
+}
+.brand-name{font-size:21px;font-weight:900;letter-spacing:-1px}
+.brand-name span{color:#a58aff}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--cyan);font-family:Inter,sans-serif;font-weight:800}
+.tag{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:30px;
+  border:1px solid #3cde9b35;background:#3cde9b0d;color:#6ce8b4;font-size:11px;font-weight:800
+}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 10px var(--green)}
+/* AUTH */
+#authPage{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;max-width:1350px;margin:auto;padding:55px}
+.auth-left{padding:35px 7% 35px 4%}
+.auth-left h1{font-size:clamp(38px,5vw,66px);line-height:1.2;margin:27px 0 18px;font-weight:900}
+.gradient-text{background:linear-gradient(90deg,#b79aff,#55dced);background-clip:text;color:transparent}
+.auth-left p{color:#a0a8c0;line-height:2;font-size:16px;max-width:510px}
+.visual{
+  margin-top:45px;position:relative;height:225px;overflow:hidden;border-radius:22px;
+  border:1px solid #7e71c444;background:linear-gradient(140deg,#171a39,#101c32 60%,#122a3c);
+}
+.visual:before{
+ content:"";position:absolute;width:230px;height:230px;border-radius:50%;
+ background:#8060ff45;filter:blur(55px);left:15%;top:5%;
+}
+.blocks{position:absolute;bottom:0;left:0;right:0;height:145px;display:flex;align-items:end;gap:7px;justify-content:center}
+.block{width:62px;background:linear-gradient(145deg,#6b59b9,#282d5b);border:1px solid #b4a5ff33;box-shadow:inset 0 0 22px #a68aff22}
+.block:nth-child(1){height:65px}.block:nth-child(2){height:105px}.block:nth-child(3){height:145px}
+.block:nth-child(4){height:88px}.block:nth-child(5){height:125px}.block:nth-child(6){height:72px}
+.visual-caption{position:absolute;top:23px;right:24px;left:24px;display:flex;justify-content:space-between}
+.auth-right{display:flex;justify-content:center}
+.auth-card{
+  width:min(440px,100%);padding:34px;background:#111525e8;border:1px solid #34344f;
+  border-radius:23px;box-shadow:0 25px 100px #0008;backdrop-filter:blur(20px);
+}
+.auth-card h2{font-size:27px;margin:25px 0 4px}
+.auth-card .sub{color:var(--muted);font-size:13px;margin-bottom:27px}
+.auth-switch{text-align:center;font-size:13px;color:var(--muted);margin-top:22px}
+.auth-switch button{background:none;border:0;color:#b69aff;font-weight:800}
+.notice{font-size:11px;color:#929bb3;background:#ffffff07;border:1px solid #ffffff10;padding:11px;border-radius:10px;line-height:1.8;margin-top:17px}
+.error{color:#ff8395;font-size:12px;min-height:20px;margin-top:8px}
+/* APP */
+#appPage{min-height:100vh}
+.topbar{
+ height:75px;border-bottom:1px solid var(--line);background:#0d1020e8;
+ display:flex;align-items:center;justify-content:space-between;padding:0 30px;
+ position:sticky;top:0;z-index:5;backdrop-filter:blur(15px)
+}
+.top-actions{display:flex;align-items:center;gap:12px}
+.avatar{width:37px;height:37px;border-radius:12px;background:#7254db;display:grid;place-items:center;font-weight:900}
+.layout{display:grid;grid-template-columns:235px 1fr;min-height:calc(100vh - 75px)}
+.sidebar{border-left:1px solid var(--line);padding:24px 15px;background:#0c0f1c}
+.side-label{font-size:10px;color:#67718d;font-weight:900;padding:12px}
+.nav-btn{
+ display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;
+ border:0;background:transparent;color:#9da6be;border-radius:11px;text-align:right;
+ font-weight:700;margin:4px 0;transition:.2s
+}
+.nav-btn:hover,.nav-btn.active{background:#8965ff19;color:#c1adff}
+.nav-icon{font-size:18px;width:23px;text-align:center}
+.side-bottom{margin-top:45px;padding:15px;border:1px solid var(--line);border-radius:13px;color:#8791a9;font-size:11px;line-height:1.9}
+.main{padding:32px;max-width:1400px;width:100%;margin:auto}
+.page-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:27px}
+.page-heading h1{font-size:26px;margin:0;font-weight:900}
+.page-heading p{margin:3px 0 0;color:var(--muted);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:25px}
+.stat,.panel,.server-card{
+ background:linear-gradient(145deg,#13182a,#101422);border:1px solid var(--line);
+ border-radius:16px;padding:20px;
+}
+.stat-top{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.stat-number{font-family:Inter,sans-serif;font-size:30px;font-weight:900;margin-top:13px}
+.stat-icon{font-size:22px}
+.panel-title{font-weight:900;font-size:16px;margin-bottom:17px}
+.empty{
+ padding:50px 20px;text-align:center;border:1px dashed #333b55;border-radius:15px;color:var(--muted)
+}
+.empty .big{font-size:42px;margin-bottom:10px}
+.server-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:15px}
+.server-card{padding:0;overflow:hidden}
+.server-cover{height:115px;background:linear-gradient(130deg,#29205c,#153e50);position:relative;overflow:hidden}
+.server-cover:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#101422,transparent)}
+.server-cover img{width:100%;height:100%;object-fit:cover}
+.server-cover span{position:absolute;z-index:1;top:12px;right:13px;background:#090d1ccc;padding:5px 9px;border-radius:8px;font-size:10px}
+.server-info{padding:17px}
+.server-info h3{margin:0 0 6px;font-size:17px}
+.server-info p{font-size:11px;color:var(--muted);margin:0 0 15px}
+.server-footer{display:flex;justify-content:space-between;align-items:center}
+.small-btn{padding:8px 12px;font-size:11px;border-radius:9px}
+/* CREATE */
+.create-wrap{max-width:700px;margin:auto}
+.type-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0 23px}
+.type-option{
+ border:1px solid var(--line);background:#0c1020;color:#aeb6ca;border-radius:13px;
+ padding:17px 8px;text-align:center;cursor:pointer;transition:.2s
+}
+.type-option strong{display:block;margin-top:8px;font-size:13px}
+.type-option.selected{border-color:#9875ff;background:#8965ff19;color:#fff;box-shadow:0 0 0 2px #8965ff18}
+.type-option .symbol{font-size:25px}
+/* CONSOLE */
+.console-header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:18px}
+.console-actions{display:flex;gap:9px;flex-wrap:wrap}
+.console-box{background:#070a12;border:1px solid #293149;border-radius:15px;overflow:hidden;box-shadow:0 18px 55px #0005}
+.terminal-top{
+ height:48px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;
+ background:#14192a;border-bottom:1px solid #252d43;font-family:Inter,sans-serif;font-size:11px;color:#a8b2c9
+}
+.terminal-dots{display:flex;gap:6px}
+.terminal-dots i{width:9px;height:9px;border-radius:50%;background:#ff6379}
+.terminal-dots i:nth-child(2){background:#ffc45e}.terminal-dots i:nth-child(3){background:#43d99b}
+.terminal{
+ height:390px;overflow:auto;padding:20px;direction:ltr;text-align:left;
+ font-family:Consolas,Monaco,monospace;font-size:12px;line-height:1.9;color:#c1cbe0;
+ white-space:pre-wrap;overflow-wrap:anywhere
+}
+.log-line{display:block}
+.log-time{color:#69758f}
+.log-info{color:#64d9ed}.log-success{color:#51e5a6}.log-warn{color:#ffc66e}.log-error{color:#ff7189}
+.command-row{display:flex;gap:10px;padding:13px;border-top:1px solid #252d43;background:#101523;direction:ltr}
+.command-row input{font-family:Consolas,monospace;font-size:12px}
+.command-row button{white-space:nowrap}
+.console-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:17px}
+.meta-card{padding:15px;background:#121729;border:1px solid var(--line);border-radius:12px}
+.meta-card small{color:var(--muted);font-size:11px}.meta-card strong{display:block;margin-top:5px;font-family:Inter,sans-serif;font-size:15px}
+.status-running{color:var(--green)}.status-stopped{color:var(--red)}
+/* RESPONSIVE */
+@media(max-width:850px){
+ #authPage{grid-template-columns:1fr;padding:25px 17px;gap:28px}
+ .auth-left{padding:15px 5px 0}.auth-left h1{font-size:39px}
+ .visual{height:150px;margin-top:25px}.blocks{height:100px}
+ .block{width:40px}.block:nth-child(3){height:100px!important}
+ .auth-card{padding:25px}
+ .layout{grid-template-columns:1fr}
+ .sidebar{display:flex;overflow-x:auto;padding:8px;border-left:0;border-bottom:1px solid var(--line)}
+ .side-label,.side-bottom{display:none}
+ .nav-btn{width:auto;white-space:nowrap;margin:0;padding:10px 13px}
+ .main{padding:22px 15px}
+ .topbar{padding:0 15px}
+}
+@media(max-width:540px){
+ .stats{grid-template-columns:1fr 1fr}
+ .stats .stat:last-child{grid-column:span 2}
+ .type-grid{gap:6px}.type-option{padding:12px 4px}
+ .console-meta{grid-template-columns:1fr}
+ .terminal{height:340px;padding:13px;font-size:11px}
+ .page-heading{align-items:flex-start;flex-direction:column}
+ .brand-name{font-size:18px}
+}
+</style>
+</head>
+<body>
+<div class="bg-glow"></div><div class="grid-bg"></div>
+
+<!-- LOGIN -->
+<section id="authPage">
+  <div class="auth-left">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div class="brand-name">Ferr<span>Host</span>.com</div>
     </div>
-
-    <h1>YOUR WORLD.<br>YOUR SERVER.</h1>
-    <p>استضف عالم Minecraft الخاص بك وابدأ مغامرتك مع أصدقائك.</p>
-
-    <div class="game-preview">
-      <div class="game-icon">⛏️</div>
-      <div>
-        <b>Minecraft Hosting</b>
-        <small>Build your own world</small>
+    <div class="eyebrow" style="margin-top:45px">YOUR SERVER. YOUR WORLD.</div>
+    <h1>عالمك الخاص.<br><span class="gradient-text">سيرفرك يبدأ هنا.</span></h1>
+    <p>منصة لإدارة سيرفرات Minecraft بواجهة سهلة، لوحة تحكم عصرية، وتجربة مصممة للاعبين.</p>
+    <div class="visual">
+      <div class="visual-caption">
+        <span class="tag"><i class="dot"></i> FERRHOST PANEL</span>
+        <span class="eyebrow">MINECRAFT HOSTING</span>
+      </div>
+      <div class="blocks">
+        <div class="block"></div><div class="block"></div><div class="block"></div>
+        <div class="block"></div><div class="block"></div><div class="block"></div>
       </div>
     </div>
-
-    <div class="game-preview">
-      <div class="game-icon">🌍</div>
-      <div>
-        <b>Java & Bedrock</b>
-        <small>Play together</small>
-      </div>
-    </div>
-
-    <div class="login-footer">FERRHOST GAMING PLATFORM</div>
   </div>
 
-  <div class="login-right">
-    <div class="login-box">
-
+  <div class="auth-right">
+    <div class="auth-card">
       <div class="eyebrow">WELCOME TO FERRHOST</div>
-
-      <h2 id="authTitle">Sign in</h2>
-
-      <p class="account-text">
-        <span id="switchText">New user?</span>
-        <span class="switch" id="switchAuth">Create an account</span>
-      </p>
-
+      <h2 id="authTitle">مرحبا بعودتك</h2>
+      <div class="sub" id="authSubtitle">سجل الدخول للوصول إلى لوحة التحكم.</div>
       <form id="authForm">
-
-        <label class="label">Username or email</label>
-        <input id="username" required minlength="3"
-          placeholder="Enter your username">
-
-        <label class="label">Password</label>
-        <input id="password" type="password" required minlength="4"
-          placeholder="Enter your password">
-
-        <button class="login-submit" id="authButton">
-          Continue
-        </button>
-
+        <div class="field">
+          <label for="username">اسم المستخدم</label>
+          <input id="username" autocomplete="username" placeholder="اكتب اسم المستخدم" required minlength="3">
+        </div>
+        <div class="field">
+          <label for="password">كلمة المرور</label>
+          <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" required minlength="4">
+        </div>
+        <button class="primary" id="authButton" type="submit" style="width:100%">تسجيل الدخول ←</button>
+        <div class="error" id="authError"></div>
       </form>
-
-      <div class="or-line">OR CONTINUE WITH</div>
-
-      <button class="google-button" type="button"
-        onclick="alert('Google login will be connected later')">
-        Continue with Google
-      </button>
-
-      <p class="login-note">
-        By continuing, you agree to use FerrHost responsibly.
-      </p>
-
+      <div class="auth-switch">
+        <span id="switchText">ما عندكش حساب؟</span>
+        <button type="button" id="switchAuth">إنشاء حساب</button>
+      </div>
+      <div class="notice">نسخة تجريبية: تسجيل الدخول هنا محلي للعرض فقط، وليس نظام حسابات آمن. لا تستعمل كلمة مرورك الحقيقية.</div>
     </div>
   </div>
-
 </section>
+
+<!-- APPLICATION -->
+<section id="appPage" class="hidden">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">F</div>
+      <div class="brand-name">Ferr<span>Host</span>.com</div>
+    </div>
+    <div class="top-actions">
+      <span class="muted" id="welcomeUser" style="font-size:12px"></span>
+      <div class="avatar" id="userAvatar">F</div>
+      <button class="secondary" id="logoutBtn">خروج</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-label">MAIN MENU</div>
+      <button class="nav-btn active" data-page="dashboard"><span class="nav-icon">▦</span> لوحة التحكم</button>
+      <button class="nav-btn" data-page="servers"><span class="nav-icon">▣</span> سيرفراتي</button>
+      <button class="nav-btn" data-page="create"><span class="nav-icon">＋</span> إنشاء سيرفر</button>
+      <button class="nav-btn" data-page="console"><span class="nav-icon">⌘</span> Console</button>
+      <div class="side-bottom">FerrHost Panel<br>واجهة تجريبية لإدارة السيرفرات.<br><span style="color:#a78cff">Version 1.0.0</span></div>
+    </aside>
+
+    <main class="main">
+      <!-- DASHBOARD -->
+      <section id="page-dashboard">
+        <div class="page-heading">
+          <div><h1>لوحة التحكم</h1><p>مرحبا بك في لوحة إدارة FerrHost.</p></div>
+          <button class="primary" data-goto="create">＋ إنشاء سيرفر</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-top"><span>عدد السيرفرات</span><span class="stat-icon">▣</span></div><div class="stat-number" id="statServers">0</div></div>
+          <div class="stat"><div class="stat-top"><span>السيرفر المحدد</span><span class="stat-icon">◈</span></div><div class="stat-number" id="statSelected">—</div></div>
+          <div class="stat"><div class="stat-top"><span>حالة اللوحة</span><span class="stat-icon">✦</span></div><div class="stat-number" style="font-size:19px;color:var(--green)">Online</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">سيرفراتك الأخيرة</div>
+          <div id="dashboardServers"></div>
+        </div>
+      </section>
+
+      <!-- SERVERS -->
+      <section id="page-servers" class="hidden">
+        <div class="page-heading">
+          <div><h1>سيرفراتي</h1><p>جميع السيرفرات التي أنشأتها.</p></div>
+          <button class="primary" data-goto="create">＋ سيرفر جديد</button>
+        </div>
+        <div id="allServers"></div>
+      </section>
+
+      <!-- CREATE -->
+      <section id="page-create" class="hidden">
+        <div class="page-heading"><div><h1>إنشاء سيرفر جديد</h1><p>اختر إعدادات السيرفر الخاص بك.</p></div></div>
+        <div class="create-wrap">
+          <div class="panel">
+            <div class="panel-title">01 — نوع السيرفر</div>
+            <div class="type-grid" id="typeGrid">
+              <button class="type-option selected" data-type="Java"><span class="symbol">☕</span><strong>Java</strong></button>
+              <button class="type-option" data-type="Bedrock"><span class="symbol">◆</span><strong>Bedrock</strong></button>
+              <button class="type-option" data-type="Java + Bedrock"><span class="symbol">✦</span><strong>Java + Bedrock</strong></button>
+            </div>
+            <div class="panel-title">02 — إعدادات السيرفر</div>
+            <form id="createForm">
+              <div class="field"><label for="serverName">اسم السيرفر</label><input id="serverName" placeholder="My Minecraft Server" maxlength="32" required></div>
+              <div class="field"><label for="serverVersion">إصدار Minecraft</label>
+                <select id="serverVersion">
+                  <option>1.21.8</option><option>1.21.7</option><option>1.21.6</option>
+                  <option>1.21.5</option><option>1.21.4</option><option>1.21.1</option>
+                  <option>1.20.6</option><option>1.20.4</option><option>1.20.1</option>
+                  <option>1.19.4</option><option>1.18.2</option><option>1.16.5</option>
+                </select>
+              </div>
+              <div class="field"><label for="serverImage">رابط صورة السيرفر (اختياري)</label><input id="serverImage" type="url" placeholder="https://example.com/image.png"></div>
+              <button class="primary" type="submit" style="width:100%">إنشاء السيرفر ←</button>
+              <div class="error" id="createError"></div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONSOLE -->
+      <section id="page-console" class="hidden">
+        <div class="console-header">
+          <div>
+            <div class="eyebrow">SERVER MANAGEMENT / CONSOLE</div>
+            <h1 id="consoleName" style="font-size:25px;margin:5px 0">Console</h1>
+            <span class="muted" id="consoleSub" style="font-size:12px">اختر سيرفرا لعرض الكونسول</span>
+          </div>
+          <div class="console-actions">
+            <button class="secondary success" id="startBtn">▶ Start</button>
+            <button class="secondary danger" id="stopBtn">■ Stop</button>
+            <button class="secondary" id="restartBtn">↻ Restart</button>
+          </div>
+        </div>
+        <div class="console-meta">
+          <div class="meta-card"><small>SERVER STATUS</small><strong id="consoleStatus" class="status-stopped">● STOPPED</strong></div>
+          <div class="meta-card"><small>MINECRAFT VERSION</small><strong id="consoleVersion">—</strong></div>
+          <div class="meta-card"><small>SERVER SOFTWARE</small><strong id="consoleType">—</strong></div>
+        </div>
+        <div class="console-box">
+          <div class="terminal-top">
+            <span>FERRHOST TERMINAL — <span id="terminalServer">NO SERVER</span></span>
+            <div class="terminal-dots"><i></i><i></i><i></i></div>
+          </div>
+          <div class="terminal" id="terminalOutput" aria-live="polite"></div>
+          <form class="command-row" id="commandForm">
+            <input id="commandInput" placeholder="Type a command..." autocomplete="off">
+            <button class="primary" type="submit">Send ↵</button>
+          </form>
+        </div>
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:13px;flex-wrap:wrap">
+          <span class="muted" style="font-size:11px">Demo terminal — commands are simulated</span>
+          <button class="secondary small-btn" id="clearLogs">Clear logs</button>
+        </div>
+      </section>
+    </main>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+let currentUser = "";
+let isRegister = false;
+let selectedType = "Java";
+let selectedServerId = null;
+let servers = [];
+let serverStatus = "stopped";
+
+function showPage(page) {
+  document.querySelectorAll('[id^="page-"]').forEach(el=>el.classList.add('hidden'));
+  const target = $('page-'+page);
+  if(target) target.classList.remove('hidden');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  if(page==="dashboard") renderDashboard();
+  if(page==="servers") renderServers();
+  if(page==="console") renderConsole();
+}
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.goto)));
+document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+$('switchAuth').addEventListener('click',()=>{
+  isRegister=!isRegister;
+  $('authTitle').textContent=isRegister?'إنشاء حساب جديد':'مرحبا بعودتك';
+  $('authSubtitle').textContent=isRegister?'أنشئ حسابا تجريبيا للدخول إلى اللوحة.':'سجل الدخول للوصول إلى لوحة التحكم.';
+  $('authButton').textContent=isRegister?'إنشاء الحساب ←':'تسجيل الدخول ←';
+  $('switchText').textContent=isRegister?'عندك حساب بالفعل؟':'ما عندكش حساب؟';
+  $('switchAuth').textContent=isRegister?'تسجيل الدخول':'إنشاء حساب';
+  $('password').value='';
+  $('authError').textContent='';
+});
+
+$('authForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const username=$('username').value.trim();
+  const password=$('password').value;
+  if(username.length<3 || password.length<4){
+    $('authError').textContent='اسم المستخدم يجب أن يكون 3 أحرف على الأقل وكلمة المرور 4 أحرف.';
+    return;
+  }
+  // Demo only: password is never saved or transmitted.
+  currentUser=username;
+  $('authPage').classList.add('hidden');
+  $('appPage').classList.remove('hidden');
+  $('welcomeUser').textContent='مرحبا، '+username;
+  $('userAvatar').textContent=username.charAt(0).toUpperCase();
+  loadServers();
+  showPage('dashboard');
+});
+
+$('logoutBtn').addEventListener('click',()=>{
+  currentUser='';
+  servers=[];
+  selectedServerId=null;
+  $('appPage').classList.add('hidden');
+  $('authPage').classList.remove('hidden');
+  $('password').value='';
+});
+
+function loadServers(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('ferrhost_servers_'+currentUser)||'[]');
+    servers=Array.isArray(saved)?saved:[];
+  }catch(e){servers=[]}
+}
+function saveServers(){
+  try{localStorage.setItem('ferrhost_servers_'+currentUser,JSON.stringify(servers))}
+  catch(e){console.warn('Could not save server list',e)}
+}
+function escapeText(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function renderServerCard(server){
+  const card=document.createElement('article');
+  card.className='server-card';
+  const cover=document.createElement('div');
+  cover.className='server-cover';
+  if(server.image){
+    const img=document.createElement('img');
+    img.src=server.image;img.alt='Server cover';img.onerror=()=>img.remove();
+    cover.appendChild(img);
+  }
+  const badge=document.createElement('span');
+  badge.textContent=server.type;cover.appendChild(badge);
+  const info=document.createElement('div');info.className='server-info';
+  const h=document.createElement('h3');h.textContent=server.name;
+  const p=document.createElement('p');p.textContent='Minecraft '+server.version+' · '+server.type;
+  const footer=document.createElement('div');footer.className='server-footer';
+  const status=document.createElement('span');status.className='tag';status.innerHTML='<i class="dot"></i> Demo';
+  const open=document.createElement('button');open.className='primary small-btn';open.textContent='فتح Console';
+  open.addEventListener('click',()=>{selectedServerId=server.id;showPage('console')});
+  footer.append(status,open);info.append(h,p,footer);card.append(cover,info);
+  return card;
+}
+function renderDashboard(){
+  $('statServers').textContent=servers.length;
+  $('statSelected').textContent=selectedServerId? '1':'—';
+  const root=$('dashboardServers');root.replaceChildren();
+  if(!servers.length){
+    root.innerHTML='<div class="empty"><div class="big">▣</div><strong>مازال ما عندك حتى سيرفر</strong><p>أنشئ أول سيرفر Minecraft وابدأ إعداد مشروعك.</p><button class="primary" data-goto="create">＋ إنشاء سيرفر</button></div>';
+    root.querySelector('[data-goto]').addEventListener('click',()=>showPage('create'));
+    return;
+  }
+  const grid=document.createElement('div');grid.className='server-grid';
+  servers.slice(0,3).forEach(s=>grid.appendChild(renderServerCard(s)));
+  root.appendChild(grid);
+}
+function renderServers(){
+  const root=$('allServers');root.replaceChildren();
+  if(!servers.length){
+    root.innerHTML='<div class="empty"><div class="big">▣</div><strong>لا توجد سيرفرات بعد</strong><p>ابدأ بإنشاء أول سيرفر لك.</p></div>';return;
+  }
+  const grid=document.createElement('div');grid.className='server-grid';
+  servers.forEach(s=>grid.appendChild(renderServerCard(s)));
+  root.appendChild(grid);
+}
+document.querySelectorAll('.type-option').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    selectedType=btn.dataset.type;
+    document.querySelectorAll('.type-option').forEach(x=>x.classList.toggle('selected',x===btn));
+  });
+});
+$('createForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=$('serverName').value.trim();
+  const image=$('serverImage').value.trim();
+  if(name.length<2){$('createError').textContent='اكتب اسما صالحا للسيرفر.';return}
+  if(image && !/^https?:\/\//i.test(image)){$('createError').textContent='رابط الصورة يجب أن يبدأ بـ http:// أو https://';return}
+  const server={
+    id:Date.now().toString(),
+    name:name,
+    type:selectedType,
+    version:$('serverVersion').value,
+    image:image
+  };
+  servers.unshift(server);
+  selectedServerId=server.id;
+  saveServers();
+  $('createForm').reset();
+  $('createError').textContent='';
+  addLog('Server profile created: '+server.name,'success');
+  showPage('console');
+});
+
+function getSelectedServer(){return servers.find(s=>s.id===selectedServerId)||servers[0]||null}
+function timeNow(){return new Date().toLocaleTimeString('en-GB')}
+function addLog(message,type='info'){
+  const output=$('terminalOutput');
+  if(!output)return;
+  const line=document.createElement('span');line.className='log-line';
+  const time=document.createElement('span');time.className='log-time';time.textContent='['+timeNow()+'] ';
+  const msg=document.createElement('span');msg.className='log-'+type;msg.textContent=message;
+  line.append(time,msg);output.appendChild(line);
+  output.scrollTop=output.scrollHeight;
+}
+function renderConsole(){
+  const s=getSelectedServer();
+  if(!s){
+    $('consoleName').textContent='Console';
+    $('consoleSub').textContent='أنشئ سيرفرا أولا من صفحة إنشاء سيرفر.';
+    $('consoleVersion').textContent='—';$('consoleType').textContent='—';
+    $('terminalServer').textContent='NO SERVER';
+    $('consoleStatus').textContent='● NO SERVER';
+    $('terminalOutput').replaceChildren();
+    return;
+  }
+  selectedServerId=s.id;
+  $('consoleName').textContent=s.name;
+  $('consoleSub').textContent='Server ID: '+s.id;
+  $('consoleVersion').textContent=s.version;
+  $('consoleType').textContent=s.type;
+  $('terminalServer').textContent=s.name.toUpperCase();
+  updateStatus();
+  if(!$('terminalOutput').children.length){
+    addLog('FerrHost Terminal initialized.','success');
+    addLog('Server profile: '+s.name,'info');
+    addLog('Minecraft version: '+s.version,'info');
+    addLog('Server type: '+s.type,'info');
+    addLog('This is a demo panel. No game server is connected.','warn');
+  }
+}
+function updateStatus(){
+  const el=$('consoleStatus');
+  el.textContent=serverStatus==='running'?'● RUNNING':'● STOPPED';
+  el.className=serverStatus==='running'?'status-running':'status-stopped';
+}
+function startServer(){
+  if(!getSelectedServer()){addLog('No server selected.','error');return}
+  if(serverStatus==='running'){addLog('Server is already running.','warn');return}
+  serverStatus='running';updateStatus();
+  addLog('Starting demo server process...','info');
+  addLog('Loading server configuration...','info');
+  addLog('Demo server status changed to RUNNING.','success');
+  addLog('Notice: this does not start a real Minecraft server.','warn');
+}
+function stopServer(){
+  if(serverStatus==='stopped'){addLog('Server is already stopped.','warn');return}
+  serverStatus='stopped';updateStatus();
+  addLog('Stopping demo server...','warn');
+  addLog('Demo server status changed to STOPPED.','success');
+}
+$('startBtn').addEventListener('click',startServer);
+$('stopBtn').addEventListener('click',stopServer);
+$('restartBtn').addEventListener('click',()=>{
+  if(!getSelectedServer()){addLog('No server selected.','error');return}
+  addLog('Restart requested...','warn');
+  serverStatus='stopped';updateStatus();
+  setTimeout(()=>{
+    serverStatus='running';updateStatus();
+    addLog('Demo server restarted.','success');
+    addLog('Reminder: no real game server is connected.','warn');
+  },500);
+});
+$('clearLogs').addEventListener('click',()=>{
+  $('terminalOutput').replaceChildren();
+  addLog('Terminal cleared.','info');
+});
+$('commandForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const input=$('commandInput');
+  const command=input.value.trim();
+  if(!command)return;
+  addLog('> '+command,'info');
+  input.value='';
+  const cmd=command.toLowerCase().split(' ')[0];
+  if(cmd==='help'){
+    addLog('Available demo commands: help, list, status, say, version','success');
+  }else if(cmd==='list'){
+    addLog('There are 0 of 20 players online. (Demo)','success');
+  }else if(cmd==='status'){
+    addLog('Demo status: '+serverStatus.toUpperCase(),'success');
+  }else if(cmd==='version'){
+    const s=getSelectedServer();
+    addLog(s?'Minecraft '+s.version:'No server selected.','success');
+  }else if(cmd==='say'){
+    addLog('Demo announcement sent.','success');
+  }else{
+    addLog('Command recognized by demo terminal only; no Minecraft server is connected.','warn');
+  }
+});
+</script>
+</body>
+</html>
