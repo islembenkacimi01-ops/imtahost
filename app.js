@@ -1,90 +1,96 @@
-const pages = {
-  overview: ["نظرة عامة", "تحكم في سيرفر Minecraft Java وBedrock من مكان واحد."],
-  console: ["Console", "مخرجات السيرفر وأوامر الإدارة."],
-  players: ["اللاعبون", "قائمة اللاعبين المتصلين بالسيرفر."],
-  files: ["File Manager", "ملفات ومجلدات Minecraft."],
-  plugins: ["Plugins", "إضافات Java وBedrock."],
-  settings: ["الإعدادات", "خيارات واجهة FreeHost."]
-};
+const $ = (id) => document.getElementById(id);
+let servers = [];
+let activeServer = null;
+let running = false;
 
-const nav = document.getElementById("navigation");
-const title = document.getElementById("page-title");
-const subtitle = document.getElementById("page-subtitle");
-
-function showPage(name) {
-  if (!pages[name]) return;
-  document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
-  document.getElementById(`${name}-page`).classList.remove("hidden");
-  document.querySelectorAll(".nav-item").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === name);
+function showApp(username) {
+  $("auth-view").hidden = true;
+  $("app-view").hidden = false;
+  $("user-label").textContent = username;
+  renderServers();
+}
+$("login-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const username = $("username").value.trim();
+  if (username.length < 3) return;
+  showApp(username);
+});
+$("logout").addEventListener("click", () => {
+  $("app-view").hidden = true;
+  $("auth-view").hidden = false;
+  $("password").value = "";
+  $("console-panel").hidden = true;
+});
+$("create-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const server = {
+    id: Date.now(),
+    name: $("server-name").value.trim(),
+    type: $("server-type").value,
+    version: $("server-version").value.trim() || "غير محدد",
+    image: $("server-image").value.trim()
+  };
+  servers.push(server);
+  $("create-form").reset();
+  renderServers();
+  openConsole(server.id);
+});
+function renderServers() {
+  $("server-count").textContent = servers.length;
+  const list = $("server-list");
+  list.innerHTML = "";
+  if (!servers.length) {
+    list.innerHTML = '<div class="empty">مازال ما عندك حتى سيرفر. أنشئ أول سيرفر من الفوق.</div>';
+    return;
+  }
+  servers.forEach((s) => {
+    const card = document.createElement("article");
+    card.className = "server-card";
+    const image = document.createElement("div");
+    image.className = "server-image";
+    if (s.image) {
+      const img = document.createElement("img");
+      img.src = s.image;
+      img.alt = "صورة " + s.name;
+      img.onerror = () => { image.textContent = "⛏"; };
+      image.appendChild(img);
+    } else image.textContent = "⛏";
+    const info = document.createElement("div");
+    info.className = "server-info";
+    const title = document.createElement("h3");
+    title.textContent = s.name;
+    const meta = document.createElement("div");
+    meta.className = "server-meta";
+    meta.textContent = `${s.type} · Minecraft ${s.version}`;
+    const btn = document.createElement("button");
+    btn.className = "ghost small";
+    btn.textContent = "فتح الكونسول";
+    btn.addEventListener("click", () => openConsole(s.id));
+    info.append(title, meta, btn);
+    card.append(image, info);
+    list.appendChild(card);
   });
-  title.textContent = pages[name][0];
-  subtitle.textContent = pages[name][1];
 }
-
-nav.addEventListener("click", event => {
-  const button = event.target.closest("[data-page]");
-  if (button) showPage(button.dataset.page);
-});
-
-document.querySelectorAll("[data-go]").forEach(button => {
-  button.addEventListener("click", () => showPage(button.dataset.go));
-});
-
-const statusText = document.getElementById("status-text");
-const statusNote = document.getElementById("status-note");
-const miniStatus = document.getElementById("mini-status");
-const indicator = document.getElementById("status-indicator");
-const startButton = document.getElementById("start-btn");
-let demoRunning = false;
-
-function setDemoStatus(running) {
-  demoRunning = running;
-  statusText.textContent = running ? "يعمل (تجريبي)" : "متوقف";
-  miniStatus.textContent = running ? "يعمل (تجريبي)" : "متوقف";
-  statusNote.textContent = running
-    ? "هذه محاكاة داخل الواجهة وليست عملية تشغيل فعلية"
-    : "لا يوجد اتصال باستضافة حقيقية";
-  indicator.classList.toggle("running", running);
-  startButton.textContent = running ? "■ إيقاف تجريبي" : "▶ تشغيل تجريبي";
-  addLog(running
-    ? "[Demo] تم تغيير الحالة إلى يعمل داخل الواجهة فقط."
-    : "[Demo] تم تغيير الحالة إلى متوقف داخل الواجهة فقط.");
+function openConsole(id) {
+  activeServer = servers.find(s => s.id === id);
+  if (!activeServer) return;
+  $("console-panel").hidden = false;
+  $("console-title").textContent = activeServer.name;
+  $("console-output").textContent = `[FreeHost] تم فتح لوحة السيرفر: ${activeServer.name}\n[Demo] هذه واجهة محاكاة وليست سيرفر Minecraft حقيقي.\n`;
+  $("console-panel").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
-
-startButton.addEventListener("click", () => setDemoStatus(!demoRunning));
-
-function addLog(message) {
-  ["console-output", "full-console"].forEach(id => {
-    const box = document.getElementById(id);
-    if (!box) return;
-    const line = document.createElement("p");
-    line.textContent = message;
-    box.appendChild(line);
-    box.scrollTop = box.scrollHeight;
-  });
+function log(message) {
+  $("console-output").textContent += `[${new Date().toLocaleTimeString()}] ${message}\n`;
+  $("console-output").scrollTop = $("console-output").scrollHeight;
 }
-
-document.getElementById("refresh-btn").addEventListener("click", () => {
-  addLog("[FreeHost] تم تحديث العرض التجريبي. لا توجد بيانات خارجية.");
+$("start-server").addEventListener("click", () => {
+  if (!activeServer) return;
+  running = true;
+  log("طلب تشغيل تجريبي — لم يتم تشغيل سيرفر حقيقي.");
 });
-
-document.getElementById("clear-console").addEventListener("click", () => {
-  document.getElementById("full-console").replaceChildren();
+$("stop-server").addEventListener("click", () => {
+  if (!activeServer) return;
+  running = false;
+  log("طلب إيقاف تجريبي — لم يتم الاتصال بمضيف خارجي.");
 });
-
-document.getElementById("command-form").addEventListener("submit", event => {
-  event.preventDefault();
-  const input = document.getElementById("command-input");
-  const command = input.value.trim();
-  if (!command) return;
-  addLog(`> ${command}`);
-  addLog(`[Demo] الأمر "${command}" لم يُرسل إلى أي سيرفر.`);
-  input.value = "";
-});
-
-document.getElementById("server-name").addEventListener("change", event => {
-  const name = event.target.value.trim() || "My Minecraft Server";
-  document.querySelector(".server-name strong").textContent = name;
-  addLog(`[Demo] اسم العرض أصبح: ${name}`);
-});
+$("clear-console").addEventListener("click", () => $("console-output").textContent = "");
