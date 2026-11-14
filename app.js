@@ -1,47 +1,90 @@
-const pages = ["overview","console","resources","files","sftp","acl","settings"];
-const titles = {overview:"نظرة عامة",console:"Console",resources:"Resources",files:"File Manager",sftp:"SFTP",acl:"ACL / الصلاحيات",settings:"الإعدادات"};
-const descriptions = {overview:"تحكم في سيرفر MTA:SA وراقب حالته من مكان واحد.",console:"تابع سجل الأحداث وأوامر الإدارة.",resources:"إدارة موارد ومودات MTA:SA.",files:"تصفح ملفات السيرفر.",sftp:"بيانات الاتصال الآمن بالملفات.",acl:"إدارة مجموعات وصلاحيات السيرفر.",settings:"إعداد المعلومات الأساسية للسيرفر."};
-let serverRunning = false;
+const pages = {
+  overview: ["نظرة عامة", "تحكم في سيرفر Minecraft Java وBedrock من مكان واحد."],
+  console: ["Console", "مخرجات السيرفر وأوامر الإدارة."],
+  players: ["اللاعبون", "قائمة اللاعبين المتصلين بالسيرفر."],
+  files: ["File Manager", "ملفات ومجلدات Minecraft."],
+  plugins: ["Plugins", "إضافات Java وBedrock."],
+  settings: ["الإعدادات", "خيارات واجهة FreeHost."]
+};
+
 const nav = document.getElementById("navigation");
-function showPage(page){
-  pages.forEach(p=>document.getElementById(p+"-page").classList.toggle("hidden",p!==page));
-  document.querySelectorAll(".nav-item").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
-  document.getElementById("page-title").textContent=titles[page];
-  document.getElementById("page-subtitle").textContent=descriptions[page];
+const title = document.getElementById("page-title");
+const subtitle = document.getElementById("page-subtitle");
+
+function showPage(name) {
+  if (!pages[name]) return;
+  document.querySelectorAll(".page").forEach(page => page.classList.add("hidden"));
+  document.getElementById(`${name}-page`).classList.remove("hidden");
+  document.querySelectorAll(".nav-item").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === name);
+  });
+  title.textContent = pages[name][0];
+  subtitle.textContent = pages[name][1];
 }
-nav.addEventListener("click",e=>{const b=e.target.closest("[data-page]");if(b)showPage(b.dataset.page)});
-document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.go)));
-function logLine(text){
-  ["console-output","full-console"].forEach(id=>{
-    const el=document.getElementById(id);if(!el)return;
-    const p=document.createElement("p");p.textContent=text;el.appendChild(p);el.scrollTop=el.scrollHeight;
+
+nav.addEventListener("click", event => {
+  const button = event.target.closest("[data-page]");
+  if (button) showPage(button.dataset.page);
+});
+
+document.querySelectorAll("[data-go]").forEach(button => {
+  button.addEventListener("click", () => showPage(button.dataset.go));
+});
+
+const statusText = document.getElementById("status-text");
+const statusNote = document.getElementById("status-note");
+const miniStatus = document.getElementById("mini-status");
+const indicator = document.getElementById("status-indicator");
+const startButton = document.getElementById("start-btn");
+let demoRunning = false;
+
+function setDemoStatus(running) {
+  demoRunning = running;
+  statusText.textContent = running ? "يعمل (تجريبي)" : "متوقف";
+  miniStatus.textContent = running ? "يعمل (تجريبي)" : "متوقف";
+  statusNote.textContent = running
+    ? "هذه محاكاة داخل الواجهة وليست عملية تشغيل فعلية"
+    : "لا يوجد اتصال باستضافة حقيقية";
+  indicator.classList.toggle("running", running);
+  startButton.textContent = running ? "■ إيقاف تجريبي" : "▶ تشغيل تجريبي";
+  addLog(running
+    ? "[Demo] تم تغيير الحالة إلى يعمل داخل الواجهة فقط."
+    : "[Demo] تم تغيير الحالة إلى متوقف داخل الواجهة فقط.");
+}
+
+startButton.addEventListener("click", () => setDemoStatus(!demoRunning));
+
+function addLog(message) {
+  ["console-output", "full-console"].forEach(id => {
+    const box = document.getElementById(id);
+    if (!box) return;
+    const line = document.createElement("p");
+    line.textContent = message;
+    box.appendChild(line);
+    box.scrollTop = box.scrollHeight;
   });
 }
-function setStatus(running){
-  serverRunning=running;
-  document.getElementById("status-text").textContent=running?"قيد التشغيل (محاكاة)":"متوقف";
-  document.getElementById("status-note").textContent=running?"حالة تجريبية — لا يوجد اتصال فعلي":"السيرفر غير مشغّل حالياً";
-  document.getElementById("mini-status").textContent=running?"تجريبي":"متوقف";
-  document.getElementById("status-indicator").style.background=running?"#27c78a":"#78859b";
-  document.getElementById("start-btn").textContent=running?"■ إيقاف السيرفر":"▶ تشغيل السيرفر";
-}
-document.getElementById("start-btn").addEventListener("click",()=>{
-  setStatus(!serverRunning);
-  logLine(serverRunning?"[DEMO] Start requested — يلزم Backend لتشغيل MTA الحقيقي.":"[DEMO] Stop requested — هذه محاكاة للواجهة فقط.");
+
+document.getElementById("refresh-btn").addEventListener("click", () => {
+  addLog("[FreeHost] تم تحديث العرض التجريبي. لا توجد بيانات خارجية.");
 });
-document.getElementById("refresh-btn").addEventListener("click",()=>logLine("[UI] تم تحديث العرض التجريبي."));
-document.getElementById("clear-console").addEventListener("click",()=>{document.getElementById("full-console").innerHTML="";});
-document.getElementById("command-form").addEventListener("submit",e=>{
-  e.preventDefault();const input=document.getElementById("command-input");const value=input.value.trim();if(!value)return;
-  logLine("[LOCAL DEMO] > "+value);input.value="";
+
+document.getElementById("clear-console").addEventListener("click", () => {
+  document.getElementById("full-console").replaceChildren();
 });
-document.getElementById("add-resource").addEventListener("click",()=>{
-  const name=prompt("أدخل اسم Resource للتجربة:");
-  if(!name||!name.trim())return;
-  const tbody=document.getElementById("resource-list");
-  if(tbody.querySelector(".empty-row"))tbody.innerHTML="";
-  const tr=document.createElement("tr");
-  [name.trim(),"غير مشغّل","MTA Resource"].forEach(value=>{const td=document.createElement("td");td.textContent=value;tr.appendChild(td)});
-  const action=document.createElement("td");const btn=document.createElement("button");btn.className="text-btn";btn.textContent="تشغيل تجريبي";btn.addEventListener("click",()=>{btn.textContent=btn.textContent==="تشغيل تجريبي"?"إيقاف تجريبي":"تشغيل تجريبي"});action.appendChild(btn);tr.appendChild(action);tbody.appendChild(tr);
-  logLine("[DEMO] Resource added: "+name.trim());
+
+document.getElementById("command-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const input = document.getElementById("command-input");
+  const command = input.value.trim();
+  if (!command) return;
+  addLog(`> ${command}`);
+  addLog(`[Demo] الأمر "${command}" لم يُرسل إلى أي سيرفر.`);
+  input.value = "";
+});
+
+document.getElementById("server-name").addEventListener("change", event => {
+  const name = event.target.value.trim() || "My Minecraft Server";
+  document.querySelector(".server-name strong").textContent = name;
+  addLog(`[Demo] اسم العرض أصبح: ${name}`);
 });
