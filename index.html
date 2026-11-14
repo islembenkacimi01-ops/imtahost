@@ -1,73 +1,619 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FreeHost | Minecraft</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FerrHost.com</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg:#080d18;
+  --panel:#111a2b;
+  --panel2:#17243a;
+  --line:#263650;
+  --green:#38e0a1;
+  --blue:#5599ff;
+  --text:#f3f7ff;
+  --muted:#91a2bb;
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Cairo,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+
+header {
+  height:76px;
+  padding:0 6%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--line);
+  background:#0b1322;
+}
+
+.logo {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:23px;
+  font-weight:800;
+  direction:ltr;
+}
+
+.logo-icon {
+  width:43px;
+  height:43px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  color:#07150f;
+  font-size:25px;
+  background:linear-gradient(135deg,#38e0a1,#4c9cff);
+  box-shadow:0 0 25px #38e0a133;
+}
+
+.logo span { color:var(--green); }
+
+.container {
+  max-width:1150px;
+  padding:35px 20px;
+  margin:auto;
+}
+
+.card {
+  background:linear-gradient(145deg,#121e32,#0e1727);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 20px 60px #0004;
+}
+
+.auth {
+  max-width:470px;
+  margin:55px auto;
+}
+
+h1 { font-size:30px; margin:8px 0; }
+h2 { font-size:23px; margin:5px 0 15px; }
+
+.muted { color:var(--muted); }
+
+.label {
+  display:block;
+  margin:13px 0 6px;
+  color:#c5d2e5;
+  font-size:14px;
+}
+
+input,select {
+  width:100%;
+  padding:13px;
+  color:white;
+  background:#091323;
+  border:1px solid var(--line);
+  border-radius:11px;
+  outline:none;
+}
+
+input:focus,select:focus { border-color:var(--green); }
+
+.btn {
+  border:0;
+  border-radius:11px;
+  padding:12px 19px;
+  font-weight:800;
+}
+
+.primary {
+  color:#06180f;
+  background:var(--green);
+}
+
+.secondary {
+  color:white;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.full { width:100%; margin-top:18px; }
+
+.switch {
+  color:var(--green);
+  cursor:pointer;
+  font-weight:700;
+}
+
+.small-note {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.8;
+  margin-top:18px;
+}
+
+.hidden { display:none !important; }
+
+.topline {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.hero {
+  padding:32px;
+  border:1px solid #28445a;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 10% 20%,#1c805344,transparent 40%),
+    linear-gradient(120deg,#14263c,#10192b);
+  margin-bottom:25px;
+}
+
+.hero h1 { font-size:32px; }
+
+.eyebrow {
+  color:var(--green);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:2px;
+}
+
+.create {
+  width:100%;
+  padding:20px;
+  border-radius:15px;
+  border:1px dashed #3b826e;
+  background:#102a29;
+  color:var(--green);
+  font-size:19px;
+  font-weight:800;
+  margin:10px 0 25px;
+}
+
+.server-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:16px;
+}
+
+.server {
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.server img {
+  width:100%;
+  height:125px;
+  object-fit:cover;
+  background:#172a3e;
+}
+
+.server-info { padding:16px; }
+
+.server-info p {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.wide { grid-column:1/-1; }
+
+.type-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:8px;
+}
+
+.type-option {
+  padding:16px 8px;
+  text-align:center;
+  background:#0b1627;
+  border:1px solid var(--line);
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.type-option.selected {
+  border-color:var(--green);
+  background:#12332e;
+  color:var(--green);
+}
+
+.console {
+  background:#030912;
+  border:1px solid #263650;
+  border-radius:14px;
+  padding:18px;
+  min-height:260px;
+  color:#9af5c9;
+  direction:ltr;
+  text-align:left;
+  white-space:pre-wrap;
+  font:13px/2 monospace;
+  overflow:auto;
+}
+
+.console-actions {
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin:15px 0;
+}
+
+.status {
+  color:var(--green);
+  background:#12352d;
+  border-radius:30px;
+  padding:5px 12px;
+  font-size:12px;
+}
+
+footer {
+  text-align:center;
+  color:#657994;
+  padding:30px;
+  font-size:12px;
+}
+
+@media(max-width:650px) {
+  .form-grid { grid-template-columns:1fr; }
+  .wide { grid-column:auto; }
+  .type-grid { grid-template-columns:1fr; }
+  .topline { align-items:flex-start; flex-direction:column; }
+  h1 { font-size:25px; }
+}
+</style>
 </head>
+
 <body>
-  <header class="topbar">
-    <a class="brand" href="#"><span class="brand-mark">F</span> FreeHost</a>
-    <span class="tag">Minecraft Hosting</span>
-  </header>
 
-  <main class="wrap">
-    <section id="auth-view" class="auth-card">
-      <div class="eyebrow">FREEHOST ACCOUNT</div>
-      <h1>مرحبا بيك في FreeHost</h1>
-      <p class="muted">سجّل الدخول باش تدخل للوحة التحكم التجريبية.</p>
-      <form id="login-form">
-        <label>اسم المستخدم</label>
-        <input id="username" autocomplete="username" placeholder="اكتب اسم المستخدم" required minlength="3">
-        <label>كلمة المرور</label>
-        <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور" required minlength="4">
-        <button class="primary full" type="submit">دخول تجريبي</button>
-      </form>
-      <p class="hint">هذه نسخة واجهة تجريبية: الحساب لا يُحفظ في قاعدة بيانات ولا يصلح لحماية حساب حقيقي.</p>
-    </section>
+<header>
+  <div class="logo">
+    <div class="logo-icon">F</div>
+    <div>Ferr<span>Host</span>.com</div>
+  </div>
+  <div class="muted">Minecraft Hosting</div>
+</header>
 
-    <section id="app-view" hidden>
-      <div class="welcome-row">
-        <div><div class="eyebrow">CONTROL PANEL</div><h1>لوحة التحكم</h1><p class="muted">مرحبا <strong id="user-label"></strong>، هذي سيرفراتك التجريبية.</p></div>
-        <button id="logout" class="ghost">تسجيل الخروج</button>
+<main class="container">
+
+<!-- LOGIN -->
+<section id="auth">
+  <div class="card auth">
+    <div class="eyebrow">WELCOME TO FERRHOST</div>
+    <h1 id="authTitle">مرحبا بيك 👋</h1>
+    <p class="muted" id="authDescription">
+      ادخل لحسابك وابدأ إدارة سيرفرات Minecraft.
+    </p>
+
+    <form id="authForm">
+      <label class="label">اسم المستخدم</label>
+      <input id="username" required minlength="3"
+        placeholder="اسم المستخدم">
+
+      <label class="label">كلمة المرور</label>
+      <input id="password" type="password" required minlength="4"
+        placeholder="كلمة المرور">
+
+      <button class="btn primary full" id="authButton">
+        تسجيل الدخول
+      </button>
+    </form>
+
+    <p class="muted" style="text-align:center;margin-top:22px">
+      <span id="switchText">ما عندكش حساب؟</span>
+      <span class="switch" id="switchAuth">إنشاء حساب</span>
+    </p>
+
+    <p class="small-note">
+      هذه نسخة تجريبية للواجهة فقط. لا تستعمل كلمة مرور حقيقية هنا.
+      الحسابات الحقيقية تحتاج نظام Backend آمن.
+    </p>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="hidden">
+
+  <div class="hero">
+    <div class="eyebrow">FERRHOST CONTROL PANEL</div>
+    <h1>لوحة التحكم الرئيسية</h1>
+    <p class="muted">مرحبا <strong id="welcomeName"></strong>، أنشئ سيرفرك وابدأ مغامرتك!</p>
+  </div>
+
+  <button class="create" id="showCreate">
+    + إنشاء سيرفر Minecraft جديد
+  </button>
+
+  <div id="createPanel" class="card hidden">
+    <h2>⚒ إنشاء سيرفر جديد</h2>
+    <p class="muted">اختار النوع والإصدار واسم السيرفر.</p>
+
+    <form id="createForm">
+      <label class="label">نوع السيرفر</label>
+      <div class="type-grid">
+        <div class="type-option selected" data-type="Java">
+          ☕<br>Java فقط
+        </div>
+        <div class="type-option" data-type="Bedrock">
+          🟩<br>Bedrock فقط
+        </div>
+        <div class="type-option" data-type="Both">
+          🌍<br>Java + Bedrock
+        </div>
       </div>
 
-      <section class="create-card">
-        <div><div class="eyebrow">NEW SERVER</div><h2>إنشاء سيرفر جديد</h2><p class="muted">اختار المنصة وعمّر معلومات السيرفر.</p></div>
-        <form id="create-form" class="create-grid">
-          <div class="field wide"><label>اسم السيرفر</label><input id="server-name" maxlength="32" placeholder="مثال: My Minecraft World" required></div>
-          <div class="field"><label>نوع السيرفر</label>
-            <select id="server-type">
-              <option value="Java">Java فقط</option>
-              <option value="Bedrock">Bedrock فقط</option>
-              <option value="Java + Bedrock">Java + Bedrock مع بعض</option>
-            </select>
-          </div>
-          <div class="field"><label>إصدار Minecraft</label><input id="server-version" placeholder="مثال: 1.21.x"></div>
-          <div class="field wide"><label>رابط صورة السيرفر (اختياري)</label><input id="server-image" type="url" placeholder="https://example.com/image.png"></div>
-          <button class="primary wide" type="submit">+ إنشاء السيرفر</button>
-        </form>
-      </section>
+      <input type="hidden" id="serverType" value="Java">
 
-      <div class="section-heading"><h2>سيرفراتي</h2><span id="server-count" class="count">0</span></div>
-      <div id="server-list" class="server-list"></div>
-
-      <section id="console-panel" class="console-card" hidden>
-        <div class="console-head">
-          <div><div class="eyebrow">SERVER CONSOLE</div><h2 id="console-title">Console</h2></div>
-          <div class="actions">
-            <button id="start-server" class="primary small">تشغيل</button>
-            <button id="stop-server" class="danger small">إيقاف</button>
-            <button id="clear-console" class="ghost small">مسح السجل</button>
-          </div>
+      <div class="form-grid" style="margin-top:18px">
+        <div class="wide">
+          <label class="label">اسم السيرفر</label>
+          <input id="serverName" required maxlength="32"
+            placeholder="مثال: My Survival Server">
         </div>
-        <div id="console-output" class="console-output" aria-live="polite"></div>
-        <p class="hint">الكونسول والأزرار هنا تجريبية فقط، وليست متصلة بسيرفر Minecraft حقيقي.</p>
-      </section>
-    </section>
-  </main>
-  <footer>FreeHost © 2026 · واجهة تجريبية مستقلة</footer>
-  <script src="app.js"></script>
+
+        <div>
+          <label class="label">إصدار Minecraft</label>
+          <select id="serverVersion">
+            <option>1.21.8</option>
+            <option>1.21.7</option>
+            <option>1.21.6</option>
+            <option>1.21.5</option>
+            <option>1.21.4</option>
+            <option>1.20.6</option>
+            <option>1.20.4</option>
+            <option>1.19.4</option>
+            <option>أخرى - نحددها لاحقا</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="label">رابط صورة السيرفر</label>
+          <input id="serverImage" type="url"
+            placeholder="https://example.com/image.png">
+        </div>
+
+        <div class="wide">
+          <button class="btn primary full" type="submit">
+            إنشاء السيرفر
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="topline" style="margin:30px 0 15px">
+    <h2>سيرفراتي</h2>
+    <span class="status" id="serverCount">0 سيرفر</span>
+  </div>
+
+  <div id="serverList" class="server-grid">
+    <div class="card muted">ما عندك حتى سيرفر حاليا. اضغط إنشاء سيرفر.</div>
+  </div>
+
+  <div style="margin-top:25px">
+    <button class="btn secondary" id="logout">تسجيل الخروج</button>
+  </div>
+</section>
+
+<!-- CONSOLE -->
+<section id="consolePage" class="hidden">
+  <div class="topline">
+    <div>
+      <div class="eyebrow">SERVER MANAGEMENT</div>
+      <h1 id="consoleName">Server Console</h1>
+      <p class="muted" id="consoleInfo"></p>
+    </div>
+    <span class="status" id="serverStatus">متوقف</span>
+  </div>
+
+  <div class="card" style="margin-top:22px">
+    <div class="topline">
+      <h2>🖥 Console</h2>
+      <button class="btn secondary" id="backDashboard">رجوع</button>
+    </div>
+
+    <div class="console-actions">
+      <button class="btn primary" id="startServer">▶ تشغيل</button>
+      <button class="btn secondary" id="stopServer">■ إيقاف</button>
+      <button class="btn secondary" id="clearConsole">مسح السجل</button>
+    </div>
+
+    <div class="console" id="consoleOutput">
+[FerrHost] Console loaded.
+[Demo] Waiting for server connection...
+    </div>
+
+    <p class="small-note">
+      الكونسول حاليا تجريبي. ربطه بسيرفر Minecraft حقيقي يحتاج Backend
+      ومزوّد استضافة يدعم التحكم عبر API.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>FerrHost.com © 2026 — Minecraft Server Platform</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let isSignup = false;
+let selectedType = "Java";
+let servers = [];
+let activeServer = null;
+
+$("switchAuth").onclick = () => {
+  isSignup = !isSignup;
+  $("authTitle").textContent = isSignup ? "إنشاء حساب جديد" : "مرحبا بيك 👋";
+  $("authDescription").textContent = isSignup
+    ? "أنشئ حسابك التجريبي في FerrHost."
+    : "ادخل لحسابك وابدأ إدارة سيرفرات Minecraft.";
+  $("authButton").textContent = isSignup
+    ? "إنشاء الحساب"
+    : "تسجيل الدخول";
+  $("switchText").textContent = isSignup
+    ? "عندك حساب؟"
+    : "ما عندكش حساب؟";
+  $("switchAuth").textContent = isSignup
+    ? "تسجيل الدخول"
+    : "إنشاء حساب";
+};
+
+$("authForm").onsubmit = e => {
+  e.preventDefault();
+  const name = $("username").value.trim();
+  if (name.length < 3) return;
+
+  $("welcomeName").textContent = name;
+  $("auth").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+};
+
+document.querySelectorAll(".type-option").forEach(option => {
+  option.onclick = () => {
+    document.querySelectorAll(".type-option")
+      .forEach(x => x.classList.remove("selected"));
+    option.classList.add("selected");
+    selectedType = option.dataset.type;
+    $("serverType").value = selectedType;
+  };
+});
+
+$("showCreate").onclick = () => {
+  $("createPanel").classList.toggle("hidden");
+};
+
+$("createForm").onsubmit = e => {
+  e.preventDefault();
+
+  const server = {
+    id: Date.now(),
+    name: $("serverName").value.trim(),
+    type: selectedType,
+    version: $("serverVersion").value,
+    image: $("serverImage").value.trim()
+  };
+
+  servers.push(server);
+  $("createForm").reset();
+  selectedType = "Java";
+  document.querySelectorAll(".type-option")
+    .forEach(x => x.classList.toggle("selected", x.dataset.type === "Java"));
+
+  $("serverType").value = "Java";
+  $("createPanel").classList.add("hidden");
+  renderServers();
+  openConsole(server.id);
+};
+
+function renderServers() {
+  $("serverCount").textContent = servers.length + " سيرفر";
+  const list = $("serverList");
+  list.innerHTML = "";
+
+  if (!servers.length) {
+    list.innerHTML = '<div class="card muted">ما عندك حتى سيرفر حاليا.</div>';
+    return;
+  }
+
+  servers.forEach(server => {
+    const card = document.createElement("article");
+    card.className = "server";
+
+    const img = document.createElement("img");
+    img.src = server.image || "";
+    img.alt = server.name;
+    img.onerror = () => { img.style.display = "none"; };
+
+    const info = document.createElement("div");
+    info.className = "server-info";
+
+    const title = document.createElement("h3");
+    title.textContent = server.name;
+
+    const details = document.createElement("p");
+    details.textContent = server.type + " · Minecraft " + server.version;
+
+    const button = document.createElement("button");
+    button.className = "btn secondary";
+    button.textContent = "فتح الكونسول";
+    button.onclick = () => openConsole(server.id);
+
+    info.append(title, details, button);
+    card.append(img, info);
+    list.append(card);
+  });
+}
+
+function openConsole(id) {
+  activeServer = servers.find(s => s.id === id);
+  if (!activeServer) return;
+
+  $("dashboard").classList.add("hidden");
+  $("consolePage").classList.remove("hidden");
+  $("consoleName").textContent = activeServer.name;
+  $("consoleInfo").textContent =
+    activeServer.type + " · Minecraft " + activeServer.version;
+
+  $("consoleOutput").textContent =
+    "[FerrHost] Console loaded.\n" +
+    "[Demo] " + activeServer.name + " selected.\n" +
+    "[Demo] Waiting for real server connection...\n";
+}
+
+function log(message) {
+  $("consoleOutput").textContent +=
+    "\n[" + new Date().toLocaleTimeString() + "] " + message;
+}
+
+$("startServer").onclick = () => {
+  if (!activeServer) return;
+  $("serverStatus").textContent = "طلب تشغيل تجريبي";
+  log("Demo start request. No real server was started.");
+};
+
+$("stopServer").onclick = () => {
+  if (!activeServer) return;
+  $("serverStatus").textContent = "متوقف";
+  log("Demo stop request. No real server was stopped.");
+};
+
+$("clearConsole").onclick = () => {
+  $("consoleOutput").textContent = "";
+};
+
+$("backDashboard").onclick = () => {
+  $("consolePage").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+};
+
+$("logout").onclick = () => {
+  $("dashboard").classList.add("hidden");
+  $("auth").classList.remove("hidden");
+  $("password").value = "";
+};
+</script>
+
 </body>
 </html>
