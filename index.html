@@ -3,140 +3,71 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <title>FreeHost | Minecraft Panel</title>
+  <title>FreeHost | Minecraft</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app-shell">
   <header class="topbar">
-    <a class="brand" href="#" aria-label="FreeHost"><span class="brand-mark">F</span><span>FREE<span class="brand-light">HOST</span></span></a>
-    <div class="top-meta"><span class="demo-pill">نسخة تجريبية</span><span class="user-avatar">FH</span></div>
+    <a class="brand" href="#"><span class="brand-mark">F</span> FreeHost</a>
+    <span class="tag">Minecraft Hosting</span>
   </header>
 
-  <div class="workspace">
-    <aside class="sidebar">
-      <div class="server-mini">
-        <div class="server-icon">⛏</div>
-        <div class="server-name"><strong>My Minecraft Server</strong><small>Java + Bedrock</small></div>
-        <span class="chevron">⌄</span>
-      </div>
-      <p class="nav-label">إدارة السيرفر</p>
-      <nav id="navigation">
-        <button class="nav-item active" data-page="overview"><span>▦</span> نظرة عامة</button>
-        <button class="nav-item" data-page="console"><span>⌘</span> Console</button>
-        <button class="nav-item" data-page="players"><span>♙</span> اللاعبون</button>
-        <button class="nav-item" data-page="files"><span>▤</span> File Manager</button>
-        <button class="nav-item" data-page="plugins"><span>◇</span> Plugins</button>
-        <button class="nav-item" data-page="settings"><span>⚙</span> الإعدادات</button>
-      </nav>
-      <div class="sidebar-bottom"><span class="online-dot"></span> واجهة FreeHost جاهزة</div>
-    </aside>
+  <main class="wrap">
+    <section id="auth-view" class="auth-card">
+      <div class="eyebrow">FREEHOST ACCOUNT</div>
+      <h1>مرحبا بيك في FreeHost</h1>
+      <p class="muted">سجّل الدخول باش تدخل للوحة التحكم التجريبية.</p>
+      <form id="login-form">
+        <label>اسم المستخدم</label>
+        <input id="username" autocomplete="username" placeholder="اكتب اسم المستخدم" required minlength="3">
+        <label>كلمة المرور</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور" required minlength="4">
+        <button class="primary full" type="submit">دخول تجريبي</button>
+      </form>
+      <p class="hint">هذه نسخة واجهة تجريبية: الحساب لا يُحفظ في قاعدة بيانات ولا يصلح لحماية حساب حقيقي.</p>
+    </section>
 
-    <main class="main-content">
-      <div class="page-heading">
-        <div><div class="eyebrow">FREEHOST / MINECRAFT</div><h1 id="page-title">نظرة عامة</h1><p id="page-subtitle">تحكم في سيرفر Minecraft Java وBedrock من مكان واحد.</p></div>
-        <div class="heading-actions"><button class="btn btn-ghost" id="refresh-btn">↻ تحديث العرض</button><button class="btn btn-primary" id="start-btn">▶ تشغيل تجريبي</button></div>
+    <section id="app-view" hidden>
+      <div class="welcome-row">
+        <div><div class="eyebrow">CONTROL PANEL</div><h1>لوحة التحكم</h1><p class="muted">مرحبا <strong id="user-label"></strong>، هذي سيرفراتك التجريبية.</p></div>
+        <button id="logout" class="ghost">تسجيل الخروج</button>
       </div>
 
-      <section id="overview-page" class="page">
-        <div class="status-banner">
-          <div class="status-copy"><span class="status-indicator" id="status-indicator"></span><strong id="status-text">متوقف</strong><span class="status-note" id="status-note">لا يوجد اتصال باستضافة حقيقية</span></div>
-          <span class="demo-tag">DEMO</span>
+      <section class="create-card">
+        <div><div class="eyebrow">NEW SERVER</div><h2>إنشاء سيرفر جديد</h2><p class="muted">اختار المنصة وعمّر معلومات السيرفر.</p></div>
+        <form id="create-form" class="create-grid">
+          <div class="field wide"><label>اسم السيرفر</label><input id="server-name" maxlength="32" placeholder="مثال: My Minecraft World" required></div>
+          <div class="field"><label>نوع السيرفر</label>
+            <select id="server-type">
+              <option value="Java">Java فقط</option>
+              <option value="Bedrock">Bedrock فقط</option>
+              <option value="Java + Bedrock">Java + Bedrock مع بعض</option>
+            </select>
+          </div>
+          <div class="field"><label>إصدار Minecraft</label><input id="server-version" placeholder="مثال: 1.21.x"></div>
+          <div class="field wide"><label>رابط صورة السيرفر (اختياري)</label><input id="server-image" type="url" placeholder="https://example.com/image.png"></div>
+          <button class="primary wide" type="submit">+ إنشاء السيرفر</button>
+        </form>
+      </section>
+
+      <div class="section-heading"><h2>سيرفراتي</h2><span id="server-count" class="count">0</span></div>
+      <div id="server-list" class="server-list"></div>
+
+      <section id="console-panel" class="console-card" hidden>
+        <div class="console-head">
+          <div><div class="eyebrow">SERVER CONSOLE</div><h2 id="console-title">Console</h2></div>
+          <div class="actions">
+            <button id="start-server" class="primary small">تشغيل</button>
+            <button id="stop-server" class="danger small">إيقاف</button>
+            <button id="clear-console" class="ghost small">مسح السجل</button>
+          </div>
         </div>
-
-        <div class="metrics-grid">
-          <article class="metric-card"><div class="metric-top"><span>عنوان السيرفر</span><span class="metric-icon">⌁</span></div><strong class="metric-value" id="server-address">غير متوفر</strong><small>يظهر بعد ربط استضافة فعلية</small></article>
-          <article class="metric-card"><div class="metric-top"><span>اللاعبون</span><span class="metric-icon">♙</span></div><strong class="metric-value" id="player-count">0 <em>/ 20</em></strong><small>عدد اللاعبين المتصلين</small></article>
-          <article class="metric-card"><div class="metric-top"><span>النسخة</span><span class="metric-icon">▣</span></div><strong class="metric-value">Paper</strong><small>خيار مقترح لسيرفر Java</small></article>
-          <article class="metric-card"><div class="metric-top"><span>المنصات</span><span class="metric-icon">◇</span></div><strong class="metric-value">Java + Bedrock</strong><small>عبر Geyser عند إعداد السيرفر</small></article>
-        </div>
-
-        <div class="content-grid">
-          <section class="panel console-panel">
-            <div class="panel-heading"><div><h2>Console</h2><p>آخر أحداث السيرفر</p></div><button class="text-btn" data-go="console">فتح الكونسول ←</button></div>
-            <div class="console-window" id="console-output">
-              <p class="console-muted">[FreeHost] لوحة Minecraft جاهزة.</p>
-              <p class="console-muted">[Info] هذه واجهة تجريبية مستقلة.</p>
-              <p class="console-muted">[System] يلزم Backend واستضافة تدعم التحكم الفعلي.</p>
-            </div>
-          </section>
-          <section class="panel quick-panel">
-            <div class="panel-heading"><div><h2>معلومات السيرفر</h2><p>الإعدادات المقترحة</p></div></div>
-            <div class="info-row"><span>اللعبة</span><strong>Minecraft</strong></div>
-            <div class="info-row"><span>Java</span><strong>Paper</strong></div>
-            <div class="info-row"><span>Bedrock</span><strong>Geyser + Floodgate</strong></div>
-            <div class="info-row"><span>الحالة</span><strong id="mini-status">متوقف</strong></div>
-          </section>
-        </div>
-        <section class="panel">
-          <div class="panel-heading"><div><h2>حالة المنصات</h2><p>توافق الدخول بعد إعداد السيرفر</p></div></div>
-          <div class="platform-grid">
-            <div class="platform-card"><span class="platform-icon">☕</span><div><strong>Java Edition</strong><small>كمبيوتر — عبر Paper</small></div><span class="soft-status">مخطط</span></div>
-            <div class="platform-card"><span class="platform-icon">▣</span><div><strong>Bedrock Edition</strong><small>هاتف وكمبيوتر — عبر Geyser</small></div><span class="soft-status">مخطط</span></div>
-          </div>
-        </section>
+        <div id="console-output" class="console-output" aria-live="polite"></div>
+        <p class="hint">الكونسول والأزرار هنا تجريبية فقط، وليست متصلة بسيرفر Minecraft حقيقي.</p>
       </section>
-
-      <section id="console-page" class="page hidden">
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Console</h2><p>مخرجات السيرفر وأوامر الإدارة</p></div><button class="btn btn-ghost" id="clear-console">مسح العرض</button></div>
-          <div class="console-window large" id="full-console"><p class="console-muted">[FreeHost] Console جاهز — لا يوجد اتصال بسيرفر حقيقي.</p></div>
-          <form id="command-form" class="command-form"><input id="command-input" placeholder="اكتب أمر تجريبي مثل: help" autocomplete="off"><button class="btn btn-primary">إرسال</button></form>
-          <small class="form-hint">الأوامر تظهر في الواجهة فقط ولا تُرسل إلى سيرفر حقيقي.</small>
-        </section>
-      </section>
-
-      <section id="players-page" class="page hidden">
-        <section class="panel">
-          <div class="panel-heading"><div><h2>اللاعبون</h2><p>قائمة اللاعبين المتصلين بالسيرفر</p></div><span class="demo-tag">0 متصل</span></div>
-          <div class="empty-state"><span>♙</span><strong>لا يوجد لاعبون حالياً</strong><small>ستظهر قائمة اللاعبين بعد ربط السيرفر الحقيقي.</small></div>
-        </section>
-      </section>
-
-      <section id="files-page" class="page hidden">
-        <section class="panel">
-          <div class="panel-heading"><div><h2>File Manager</h2><p>ملفات ومجلدات Minecraft</p></div><span class="demo-tag">عرض توضيحي</span></div>
-          <div class="file-path">/ home / minecraft-server /</div>
-          <div class="file-list">
-            <div><span class="file-symbol">📁</span><span>world/</span><small>عالم اللعبة</small></div>
-            <div><span class="file-symbol">📁</span><span>plugins/</span><small>إضافات Paper</small></div>
-            <div><span class="file-symbol">📄</span><span>server.properties</span><small>إعدادات السيرفر</small></div>
-            <div><span class="file-symbol">📄</span><span>eula.txt</span><small>اتفاقية Minecraft</small></div>
-          </div>
-          <p class="form-hint">هذه أسماء توضيحية فقط؛ لا توجد ملفات استضافة متصلة حالياً.</p>
-        </section>
-      </section>
-
-      <section id="plugins-page" class="page hidden">
-        <section class="panel">
-          <div class="panel-heading"><div><h2>Plugins</h2><p>إضافات مقترحة لتجهيز Java وBedrock</p></div><span class="demo-tag">غير مثبتة</span></div>
-          <div class="plugin-list">
-            <div class="plugin-row"><div class="plugin-logo">P</div><div class="plugin-info"><strong>Paper</strong><small>منصة سيرفر Java محسّنة</small></div><span class="soft-status">منصة السيرفر</span></div>
-            <div class="plugin-row"><div class="plugin-logo geyser">G</div><div class="plugin-info"><strong>Geyser</strong><small>يسمح للاعبي Bedrock بالدخول إلى سيرفر Java</small></div><span class="soft-status">مطلوب لـ Bedrock</span></div>
-            <div class="plugin-row"><div class="plugin-logo flood">F</div><div class="plugin-info"><strong>Floodgate</strong><small>يسهّل دخول لاعبي Bedrock دون حساب Java</small></div><span class="soft-status">اختياري حسب الإعداد</span></div>
-          </div>
-          <p class="form-hint">لن يتم تنزيل أو تثبيت أي إضافة من هذه الصفحة في النسخة التجريبية.</p>
-        </section>
-      </section>
-
-      <section id="settings-page" class="page hidden">
-        <section class="panel">
-          <div class="panel-heading"><div><h2>إعدادات السيرفر</h2><p>خيارات واجهة FreeHost</p></div></div>
-          <div class="settings-form">
-            <label>اسم السيرفر<input id="server-name" value="My FreeHost Minecraft Server"></label>
-            <label>عدد اللاعبين الأقصى<input type="number" value="20" min="1" max="100"></label>
-            <label>نوع السيرفر<select><option>Paper (Java + Geyser)</option><option>Vanilla Java</option><option>Bedrock Dedicated Server</option></select></label>
-            <label>المنطقة<select><option>تُحدد عند اختيار الاستضافة</option></select></label>
-          </div>
-          <div class="notice">الإعدادات هنا للعرض فقط ولا تُحفظ في استضافة فعلية بعد.</div>
-        </section>
-      </section>
-
-      <footer>FreeHost © 2026 <span>لوحة Minecraft تجريبية — ليست خدمة استضافة فعلية بعد.</span></footer>
-    </main>
-  </div>
-</div>
-<script src="app.js"></script>
+    </section>
+  </main>
+  <footer>FreeHost © 2026 · واجهة تجريبية مستقلة</footer>
+  <script src="app.js"></script>
 </body>
 </html>
