@@ -1,173 +1,91 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ImtaHost | Free Game Hosting</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: #080d18;
-      color: white;
-      font-family: Arial, sans-serif;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 25px 8%;
-      border-bottom: 1px solid #202a3d;
-    }
-
-    .logo {
-      font-size: 27px;
-      font-weight: bold;
-      color: #38bdf8;
-    }
-
-    nav a {
-      color: #cbd5e1;
-      text-decoration: none;
-      margin-right: 20px;
-    }
-
-    .hero {
-      text-align: center;
-      padding: 100px 20px 65px;
-    }
-
-    .hero h1 {
-      font-size: clamp(35px, 6vw, 60px);
-      margin-bottom: 20px;
-    }
-
-    .hero h1 span {
-      color: #38bdf8;
-    }
-
-    .hero p {
-      color: #94a3b8;
-      font-size: 17px;
-      line-height: 1.8;
-    }
-
-    .games {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 360px));
-      justify-content: center;
-      gap: 25px;
-      padding: 35px 20px 90px;
-    }
-
-    .card {
-      background: #111b2d;
-      border: 1px solid #263750;
-      border-radius: 18px;
-      padding: 30px;
-      text-align: center;
-      transition: .25s;
-    }
-
-    .card:hover {
-      transform: translateY(-6px);
-      border-color: #38bdf8;
-    }
-
-    .game-icon {
-      font-size: 55px;
-      margin-bottom: 20px;
-    }
-
-    .card h2 {
-      margin-bottom: 15px;
-    }
-
-    .card p {
-      color: #94a3b8;
-      line-height: 1.8;
-      margin-bottom: 25px;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #0284c7;
-      color: white;
-      text-decoration: none;
-      padding: 13px 25px;
-      border-radius: 9px;
-      font-weight: bold;
-    }
-
-    .btn:hover {
-      background: #0369a1;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-      border-top: 1px solid #202a3d;
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FreeHost | MTA Server Panel</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#"><span class="brand-mark">F</span><span>FREE<span class="brand-light">HOST</span></span></a>
+      <div class="top-meta"><span class="demo-pill">DEMO PANEL</span><span class="user-avatar">FH</span></div>
+    </header>
 
-<header>
-  <div class="logo">⚡ ImtaHost</div>
-  <nav>
-    <a href="#games">الألعاب</a>
-    <a href="#about">من نحن</a>
-  </nav>
-</header>
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="server-mini">
+          <div class="server-icon">M</div>
+          <div><strong>MTA: San Andreas</strong><small>My MTA Server</small></div>
+          <span class="chevron">⌄</span>
+        </div>
+        <p class="nav-label">إدارة السيرفر</p>
+        <nav id="navigation">
+          <button class="nav-item active" data-page="overview"><span>▦</span> نظرة عامة</button>
+          <button class="nav-item" data-page="console"><span>⌘</span> Console</button>
+          <button class="nav-item" data-page="resources"><span>▧</span> Resources</button>
+          <button class="nav-item" data-page="files"><span>▤</span> File Manager</button>
+          <button class="nav-item" data-page="sftp"><span>⇄</span> SFTP</button>
+          <button class="nav-item" data-page="acl"><span>♙</span> ACL / الصلاحيات</button>
+          <button class="nav-item" data-page="settings"><span>⚙</span> الإعدادات</button>
+        </nav>
+        <div class="sidebar-bottom"><span class="online-dot"></span> النظام التجريبي جاهز</div>
+      </aside>
 
-<section class="hero">
-  <h1>استضف عالمك مع <span>ImtaHost</span></h1>
-  <p>
-    منصتك لاستضافة سيرفرات الألعاب.
-    <br>
-    Minecraft و MTA:SA في مكان واحد.
-  </p>
-</section>
+      <main class="main-content">
+        <div class="page-heading">
+          <div><div class="eyebrow">SERVER CONTROL PANEL</div><h1 id="page-title">نظرة عامة</h1><p id="page-subtitle">تحكم في سيرفر MTA:SA وراقب حالته من مكان واحد.</p></div>
+          <div class="heading-actions"><button class="btn btn-ghost" id="refresh-btn">↻ تحديث</button><button class="btn btn-primary" id="start-btn">▶ تشغيل السيرفر</button></div>
+        </div>
 
-<section class="games" id="games">
+        <section id="overview-page" class="page">
+          <div class="status-banner">
+            <div><span class="status-indicator" id="status-indicator"></span><strong id="status-text">متوقف</strong><span class="status-note" id="status-note">السيرفر غير مشغّل حالياً</span></div>
+            <span class="demo-tag">بيانات تجريبية</span>
+          </div>
 
-  <div class="card">
-    <div class="game-icon">⛏️</div>
-    <h2>Minecraft Hosting</h2>
-    <p>
-      لوحة مستقلة لإدارة سيرفر Minecraft
-      ومتابعة حالة السيرفر وإعداداته.
-    </p>
-    <a href="minecraft.html" class="btn">
-      لوحة Minecraft
-    </a>
+          <div class="metrics-grid">
+            <article class="metric-card"><div class="metric-top"><span>عنوان السيرفر IP</span><span class="metric-icon">⌁</span></div><strong class="metric-value" id="server-ip">غير متوفر</strong><small>يظهر بعد ربط الاستضافة الحقيقية</small></article>
+            <article class="metric-card"><div class="metric-top"><span>اللاعبون</span><span class="metric-icon">♙</span></div><strong class="metric-value">0 <em>/ 32</em></strong><small>عدد اللاعبين المتصلين</small></article>
+            <article class="metric-card"><div class="metric-top"><span>استهلاك CPU</span><span class="metric-icon">◫</span></div><strong class="metric-value">— <em>%</em></strong><small>بانتظار ربط مراقبة النظام</small></article>
+            <article class="metric-card"><div class="metric-top"><span>استهلاك Memory</span><span class="metric-icon">▥</span></div><strong class="metric-value">— <em>MB</em></strong><small>بانتظار ربط مراقبة النظام</small></article>
+          </div>
+
+          <div class="content-grid">
+            <section class="panel console-panel">
+              <div class="panel-heading"><div><h2>Console</h2><p>سجل أحداث السيرفر</p></div><button class="text-btn" data-go="console">فتح الكونسول ←</button></div>
+              <div class="console-window" id="console-output"><p class="console-muted">[FreeHost] لوحة التحكم جاهزة.</p><p class="console-muted">[Info] هذه نسخة واجهة تجريبية فقط.</p><p class="console-muted">[System] اربط Backend لتشغيل MTA فعلياً.</p></div>
+            </section>
+            <section class="panel quick-panel">
+              <div class="panel-heading"><div><h2>معلومات السيرفر</h2><p>الإعدادات الأساسية</p></div></div>
+              <div class="info-row"><span>اللعبة</span><strong>MTA: San Andreas</strong></div>
+              <div class="info-row"><span>المنفذ</span><strong>22003 (افتراضي)</strong></div>
+              <div class="info-row"><span>الحالة</span><strong id="mini-status">متوقف</strong></div>
+              <div class="info-row"><span>مدة التشغيل</span><strong>—</strong></div>
+            </section>
+          </div>
+          <section class="panel resource-summary"><div class="panel-heading"><div><h2>Resources</h2><p>المودات والموارد المحمّلة</p></div><button class="text-btn" data-go="resources">إدارة الموارد ←</button></div><div class="empty-state"><span>▧</span><strong>لا توجد موارد متصلة</strong><small>ستظهر موارد MTA هنا بعد ربط السيرفر.</small></div></section>
+        </section>
+
+        <section id="console-page" class="page hidden">
+          <section class="panel"><div class="panel-heading"><div><h2>Console</h2><p>مخرجات السيرفر وأوامر الإدارة</p></div><button class="btn btn-ghost" id="clear-console">مسح العرض</button></div><div class="console-window large" id="full-console"><p class="console-muted">[FreeHost] Console جاهز — لا يوجد اتصال بسيرفر حقيقي.</p></div><form id="command-form" class="command-form"><input id="command-input" placeholder="أدخل أمر الإدارة..." autocomplete="off"><button class="btn btn-primary">إرسال</button></form><small class="form-hint">الأوامر هنا للعرض فقط إلى أن يتم ربط Backend آمن.</small></section>
+        </section>
+
+        <section id="resources-page" class="page hidden"><section class="panel"><div class="panel-heading"><div><h2>Resources</h2><p>إدارة مودات وموارد MTA</p></div><button class="btn btn-primary" id="add-resource">＋ إضافة Resource</button></div><div class="table-wrap"><table><thead><tr><th>اسم المورد</th><th>الحالة</th><th>النوع</th><th>الإجراء</th></tr></thead><tbody id="resource-list"><tr class="empty-row"><td colspan="4">مازال ما كاين حتى Resource مضاف.</td></tr></tbody></table></div></section></section>
+
+        <section id="files-page" class="page hidden"><section class="panel"><div class="panel-heading"><div><h2>File Manager</h2><p>ملفات السيرفر ومجلدات الموارد</p></div><span class="demo-tag">عرض تجريبي</span></div><div class="file-path">/ home / mta-server /</div><div class="file-list"><div>📁 <span>mods/</span><small>مجلد الموارد</small></div><div>📁 <span>server/</span><small>إعدادات السيرفر</small></div><div>📄 <span>mtaserver.conf</span><small>ملف الإعدادات</small></div><div>📄 <span>acl.xml</span><small>الصلاحيات</small></div></div></section></section>
+
+        <section id="sftp-page" class="page hidden"><section class="panel"><div class="panel-heading"><div><h2>اتصال SFTP</h2><p>بيانات الاتصال بملفات السيرفر</p></div><span class="demo-tag">غير مفعّل</span></div><div class="notice">بيانات SFTP الحقيقية تتولد من الخادم بعد إعداد Backend. لا تشارك كلمة مرورك أو مفاتيح الاتصال مع أي شخص.</div><div class="sftp-grid"><div><small>Host</small><strong>غير متوفر</strong></div><div><small>Port</small><strong>22</strong></div><div><small>Username</small><strong>ينشأ لاحقاً</strong></div><div><small>Password / Key</small><strong>غير مُنشأ</strong></div></div></section></section>
+
+        <section id="acl-page" class="page hidden"><section class="panel"><div class="panel-heading"><div><h2>ACL / الصلاحيات</h2><p>إدارة مجموعات وصلاحيات اللاعبين</p></div></div><div class="notice">تعديل ACL الحقيقي يحتاج تحقق من صلاحيات المستخدم قبل حفظ أي تغيير.</div><div class="file-list"><div>♙ <span>Admin</span><small>مدير السيرفر</small></div><div>♙ <span>Moderator</span><small>مشرف</small></div><div>♙ <span>Everyone</span><small>اللاعبون</small></div></div></section></section>
+
+        <section id="settings-page" class="page hidden"><section class="panel"><div class="panel-heading"><div><h2>إعدادات السيرفر</h2><p>المعلومات الأساسية</p></div></div><div class="settings-form"><label>اسم السيرفر<input value="My FreeHost MTA Server"></label><label>عدد اللاعبين الأقصى<input type="number" value="32" min="1" max="128"></label><label>Port<input value="22003" disabled></label><label>المنطقة الجغرافية<select><option>تُحدد عند اختيار الاستضافة</option></select></label></div><div class="notice">التغييرات لا تُحفظ في سيرفر حقيقي في هذه النسخة التجريبية.</div></section></section>
+
+        <footer>FreeHost © 2026 <span>واجهة أولية — لا تستضيف سيرفر MTA فعلياً بعد.</span></footer>
+      </main>
+    </div>
   </div>
-
-  <div class="card">
-    <div class="game-icon">🏎️</div>
-    <h2>MTA:SA Hosting</h2>
-    <p>
-      لوحة مستقلة لإدارة سيرفرات MTA:SA
-      والتحكم بإعداداتها.
-    </p>
-    <a href="mta.html" class="btn">
-      لوحة MTA:SA
-    </a>
-  </div>
-
-</section>
-
-<footer id="about">
-  © 2026 ImtaHost - All Rights Reserved
-</footer>
-
+  <script src="app.js"></script>
 </body>
 </html>
